@@ -128,9 +128,18 @@ ul{margin:0;padding:0;list-style:none}
 .offer .btn.light:hover{background:var(--accent);color:var(--accent-ink)}
 .offer .btn.line{height:40px;padding:0 18px;font-size:14px;border-color:color-mix(in srgb,var(--bg) 40%,transparent);color:var(--bg)}
 .offer .btn.line:hover{border-color:var(--bg)}
-.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
-.minis div{font-size:13px;opacity:.8}
-.minis b{display:block;font:600 15px var(--f-display);opacity:1;margin-bottom:2px}
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;align-items:start}
+.minis>div{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid color-mix(in srgb,var(--bg) 18%,transparent);border-radius:14px;background:color-mix(in srgb,var(--bg) 6%,transparent);font-size:13px;line-height:1.45}
+.minis svg{width:22px;height:22px;color:var(--accent)}
+.minis b{display:block;font:600 15px var(--f-display)}
+.minis .mt{opacity:.75}
+.minis .wide{grid-column:1/-1}
+.minis .wide .hd{display:flex;align-items:center;gap:10px}
+.rules{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+.rules li{position:relative;padding-left:18px;opacity:.85}
+.rules li:before{content:"";position:absolute;left:2px;top:.5em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.policy{margin-top:8px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--ink);font-size:13px;line-height:1.5}
+.policy b{display:inline}
 
 /* trust */
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -190,6 +199,7 @@ ul{margin:0;padding:0;list-style:none}
 .of code{font:500 12px var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 6px;letter-spacing:.06em}
 .pinform{display:flex;gap:8px}
 .in{height:44px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);color:var(--ink);padding:0 14px;font:inherit;width:100%;min-width:0}
+select.in.sel{appearance:none;-webkit-appearance:none;padding-right:40px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px}
 textarea.in{height:auto;padding:12px 14px;resize:vertical;min-height:96px}
 .in::placeholder{color:var(--muted)}
 .hint{font-size:13px;margin-top:8px;min-height:20px}
@@ -276,10 +286,26 @@ details .dc{padding:0 0 18px;color:var(--muted);font-size:14.5px;max-width:60ch}
 .sum .disc{color:var(--good)}
 .sum .tot{font:700 18px var(--f-display);padding-top:10px;border-top:1px solid var(--line);margin-top:4px}
 .co{display:grid;gap:14px;padding:16px 0}
+.co h4{font:600 15px var(--f-display);color:var(--ink);margin:6px 0 -4px}
+.co .opt{font-weight:400;opacity:.8}
 .pay{display:grid;gap:8px}
-.pay label{display:flex;gap:10px;align-items:center;border:1px solid var(--line-strong);border-radius:12px;padding:12px 14px;font-size:14px;cursor:pointer}
-.pay input{accent-color:var(--accent)}
-.pay label:has(input:checked){border-color:var(--ink)}
+.pgrp{font:500 11px var(--f-mono,monospace);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.pay label{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;border:1px solid var(--line-strong);border-radius:14px;padding:13px 14px;font-size:14px;color:var(--ink);cursor:pointer;background:var(--surface);transition:border-color .15s,box-shadow .15s}
+.pay label:hover{border-color:var(--ink)}
+.pay input{accent-color:var(--accent);margin:0;width:18px;height:18px}
+.pay label:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pay .pt b{display:block;font-weight:600}
+.pay .pt small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.save{font:600 12px/1 var(--f-body);color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent);padding:6px 9px;border-radius:999px;white-space:nowrap}
+.prebanner{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--ink);font-size:13.5px}
+.prebanner svg{flex:none;width:20px;height:20px;color:var(--accent)}
+.split{grid-column:2/-1;display:none;margin-top:8px;border-top:1px dashed var(--line-strong);padding-top:10px;font-size:13px;gap:6px}
+.pay label:has(input:checked) .split{display:grid}
+.split div{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.split .now{font-weight:600;color:var(--accent)}
+.split .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.split .bar i{display:block;height:100%;width:30%;background:var(--accent);border-radius:3px}
+.split p{color:var(--muted);font-size:12px}
 .back{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;justify-self:start}
 .done{text-align:center;padding:48px 0;display:grid;gap:14px;justify-items:center}
 .done .ok{width:64px;height:64px;border-radius:50%;background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good);display:grid;place-items:center}
@@ -316,7 +342,7 @@ details .dc{padding:0 0 18px;color:var(--muted);font-size:14.5px;max-width:60ch}
 }
 </style>
 
-<div class="announce"><div class="inner">Free delivery over ₹1,999 &nbsp;·&nbsp; Use code <b>WHY10</b> for 10% off your first order</div></div>
+<div class="announce"><div class="inner">Free delivery on every order &nbsp;·&nbsp; Use code <b>WHY10</b> for 10% off your first order</div></div>
 <header class="top">
   <div class="inner bar">
     <a class="logo" href="#home" aria-label="Whyverse home"><span>why</span>verse</a>
@@ -400,7 +426,7 @@ var P=[
  {n:"Reshma K.",c:"Kozhikode",r:4,t:"Lovely colour",b:"The indigo is deeper than I expected, which I like. It sheds a little lint in the first wash.",d:"25 Sep 2026",ts:20260925,v:1},
  {n:"Paul J.",c:"Hyderabad",r:4,t:"Good on the sofa",b:"Generous for one person and fine for two to share. The fringe edges look tidy.",d:"3 Sep 2026",ts:20260903,v:1}]}
 ];
-var COUPON="WHY10",FREE_AT=1999,SHIP_FEE=99;
+var COUPON="WHY10";
 
 /* ---------- helpers ---------- */
 function $(s,r){return (r||document).querySelector(s)}
@@ -498,22 +524,21 @@ function home(){
    +'<a class="hero-art" href="#p-'+h.id+'" aria-label="View '+esc(h.name)+'">'+art(h,h.colors[1].h)+'<span class="hero-tag">'+esc(h.name)+'<b>'+fmt(h.price)+'</b></span></a>'
    +'</div></section>'
    +'<section id="shop" class="inner section"><div class="sec-head"><h2>The collection</h2><span class="mono muted">4 products</span></div><div class="grid">'+P.map(card).join("")+'</div></section>'
-   +'<section id="offers" class="offer"><div class="inner offer-grid"><div><p class="mono" style="opacity:.7;margin-bottom:14px">Welcome offer</p><h2>10% off your first order.</h2><p class="sub">Add anything to your cart and apply the code. Orders above '+fmt(FREE_AT)+' ship free.</p></div>'
+   +'<section id="offers" class="offer"><div class="inner offer-grid"><div><p class="mono" style="opacity:.7;margin-bottom:14px">Welcome offer</p><h2>10% off your first order.</h2><p class="sub">Add anything to your cart and apply the code. Every order ships free.</p></div>'
    +'<div><div class="code"><strong>'+COUPON+'</strong><span class="grow">Applies to the whole cart</span><button class="btn light" data-act="applyc" data-code="'+COUPON+'">Apply to cart</button><button class="btn line" data-act="copyc" data-code="'+COUPON+'">Copy</button></div>'
-   +'<div class="minis"><div><b>No-cost EMI</b>On orders above ₹3,000</div><div><b>Free delivery</b>On orders above '+fmt(FREE_AT)+'</div><div><b>15-day returns</b>No questions asked</div></div></div></div></section>'
+   +'<div class="minis"><div>'+I.tag+'<b>Only 3 valid coupon codes</b><span class="mt">Limited codes available. Grab one before they run out.</span></div>'+'<div>'+I.truck+'<b>Free delivery</b><span class="mt">On any order, no minimum.</span></div>'+'<div class="wide"><div class="hd">'+I.ret+'<b>15-day returns</b></div><ul class="rules"><li>Accepted only if your product was damaged during delivery.</li><li>A full, uncut unboxing video is required to claim a return.</li></ul></div></div></div></div></section>'
    +'<section class="inner section"><div class="trust">'
    +'<div>'+I.truck+'<p><b>Ships in 24 hours</b><span>Packed in Kerala and sent to 19,000+ pincodes across India.</span></p></div>'
-   +'<div>'+I.ret+'<p><b>15-day returns</b><span>Changed your mind? Send it back for a full refund.</span></p></div>'
+   +'<div>'+I.ret+'<p><b>15-day returns</b><span>Accepted only if the product arrives damaged in delivery. A full, uncut unboxing video is required to claim.</span></p></div>'
    +'<div>'+I.shield+'<p><b>Warranty on everything</b><span>From 6 months to 2 years depending on the product.</span></p></div>'
    +'</div></section>';
 }
 
 function offersBox(p){
-  var emi=Math.round(p.price/6);
   return '<div class="box"><h3>Offers for you</h3>'
    +'<div class="of">'+I.tag+'<div><b>Extra 10% off your first order</b><span>Use code <code>'+COUPON+'</code> in your cart.</span></div><button class="btn ghost sm" data-act="applyc" data-code="'+COUPON+'">Apply</button></div>'
-   +'<div class="of">'+I.truck+'<div><b>Free delivery above '+fmt(FREE_AT)+'</b><span>'+(p.price>=FREE_AT?'This item qualifies on its own.':'Add another item to qualify.')+'</span></div></div>'
-   +'<div class="of">'+I.card+'<div><b>No-cost EMI from '+fmt(emi)+'/month</b><span>6 months on all major credit cards.</span></div></div></div>';
+   +'<div class="of">'+I.truck+'<div><b>Free delivery</b><span>Every order ships free, no minimum.</span></div></div>'
+   +'<div class="of">'+I.tag+'<div><b>Only 3 valid coupon codes available</b><span>Limited codes, so use yours while it lasts.</span></div></div></div>';
 }
 function reviewList(p){
   var list=allReviews(p).slice();
@@ -532,10 +557,10 @@ function pdp(p){
   var specs=p.specs.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>'}).join("");
   return '<div class="inner crumbs"><a href="#home">Home</a><span>/</span><a href="#shop">Shop</a><span>/</span><span aria-current="page">'+esc(p.name)+'</span></div>'
    +'<section class="inner pdp"><div class="gallery"><div class="art" id="pArt">'+art(p,c.h)+'</div>'
-   +'<div class="gal-meta"><div><b>Ships in 24 h</b>Free over '+fmt(FREE_AT)+'</div><div><b>15-day returns</b>Full refund</div><div><b>'+esc(p.specs[p.specs.length-1][1])+'</b>Warranty</div></div></div>'
+   +'<div class="gal-meta"><div><b>Ships in 24 h</b>Free delivery</div><div><b>15-day returns</b>Damaged in delivery only</div><div><b>'+esc(p.specs[p.specs.length-1][1])+'</b>Warranty</div></div></div>'
    +'<div class="info"><div><p class="eyebrow mono" style="margin-bottom:10px">'+esc(p.tag)+'</p><h1>'+esc(p.name)+'</h1></div>'
    +'<button class="ratingline" data-act="scroll" data-t="reviews">'+stars(st.avg)+'<span class="tn">'+st.avg.toFixed(1)+'</span><u>'+st.total+' reviews</u></button>'
-   +'<div><div class="pprice"><b>'+fmt(p.price)+'</b><s>'+fmt(p.mrp)+'</s><span class="pill">'+disc(p)+'% off</span></div><p class="emi">Inclusive of all taxes. EMI from '+fmt(Math.round(p.price/6))+'/month.</p></div>'
+   +'<div><div class="pprice"><b>'+fmt(p.price)+'</b><s>'+fmt(p.mrp)+'</s><span class="pill">'+disc(p)+'% off</span></div><p class="emi">Inclusive of all taxes.</p></div>'
    +'<p class="muted" style="max-width:56ch">'+esc(p.blurb)+'</p>'
    +'<div><div class="lbl"><span class="muted">Colour</span><b id="cName">'+esc(c.n)+'</b></div><div class="swatches">'+sw+'</div></div>'
    +'<div class="buyrow"><div class="stepper"><button data-act="pq" data-d="-1" aria-label="Decrease quantity">−</button><span id="pQty" aria-live="polite">'+sel.qty+'</span><button data-act="pq" data-d="1" aria-label="Increase quantity">+</button></div>'
@@ -543,7 +568,7 @@ function pdp(p){
    +offersBox(p)
    +'<div><div class="lbl"><b>Check delivery</b></div><form class="pinform" id="pinForm" novalidate><input class="in tn" id="pinInput" inputmode="numeric" maxlength="6" placeholder="Enter pincode, e.g. 676101" aria-label="Pincode"><button class="btn ghost sm" style="height:44px" type="submit">Check</button></form><p class="hint" id="pinHint" role="status"></p></div>'
    +'<div><details open><summary>Specifications</summary><div class="dc"><table class="spec"><tbody>'+specs+'</tbody></table></div></details>'
-   +'<details><summary>Delivery and returns</summary><div class="dc">Orders ship within 24 hours and arrive in 3 to 6 working days. Delivery is free above '+fmt(FREE_AT)+', otherwise '+fmt(SHIP_FEE)+'. You can return any item within 15 days of delivery for a full refund.</div></details>'
+   +'<details><summary>Delivery and returns</summary><div class="dc">Orders ship within 24 hours and arrive in 3 to 6 working days. Delivery is free on every order.<div class="policy"><b>Returns:</b> within 15 days of delivery, accepted only if the product was damaged during delivery. To claim, share a full, uncut video of you unboxing the package.</div></div></details>'
    +'<details><summary>Care and warranty</summary><div class="dc">'+esc(p.specs[p.specs.length-1][1])+' from the date of delivery. Keep your order confirmation as proof of purchase. Warranty covers manufacturing defects.</div></details></div>'
    +'</div></section>'
    +'<section class="reviews" id="reviews"><div class="inner rv-grid"><aside><p class="mono muted" style="margin-bottom:12px">Customer reviews</p>'
@@ -573,11 +598,39 @@ function route(){
 window.addEventListener("hashchange",route);
 
 /* ---------- cart ---------- */
+var PAY={
+ UPI:{t:"UPI",s:"GPay, PhonePe, Paytm or any UPI app",off:100,pre:1},
+ Card:{t:"Credit or debit card",s:"Visa, Mastercard, RuPay",off:100,pre:1},
+ COD:{t:"Cash on delivery",s:"Pay the full amount when it arrives",off:0},
+ PCOD:{t:"Partial cash on delivery",s:"Pay 30% now, the rest on delivery",off:50,adv:0.3}
+};
+var payM="UPI";
 function totals(){
   var sub=0;cart.items.forEach(function(i){sub+=byId(i.id).price*i.qty});
   var d=cart.coupon===COUPON?Math.round(sub*0.1):0;
-  var after=sub-d,ship=(after===0||after>=FREE_AT)?0:SHIP_FEE;
-  return {sub:sub,d:d,after:after,ship:ship,total:after+ship};
+  var after=sub-d,ship=0,m=PAY[payM]||PAY.UPI;
+  var pd=Math.min(m.off,after),total=after+ship-pd;
+  var now=m.pre?total:m.adv?Math.round(total*m.adv):0;
+  return {sub:sub,d:d,after:after,ship:ship,pd:pd,total:total,now:now,later:total-now};
+}
+function payOff(m,t){return Math.min(PAY[m].off,t.after)}
+function payLabel(m,t){
+  var o=PAY[m],off=payOff(m,t),tot=t.after+t.ship-off;
+  var x='<label><input type="radio" name="pay" value="'+m+'"'+(payM===m?' checked':'')+'><span class="pt"><b>'+o.t+'</b><small>'+o.s+'</small></span>'+(off?'<span class="save">Save '+fmt(off)+'</span>':'<span></span>');
+  if(o.adv){var nw=Math.round(tot*o.adv);
+    x+='<span class="split"><span class="bar"><i></i></span><div class="now"><span>Pay now (30%)</span><span>'+fmt(nw)+'</span></div><div><span>Pay on delivery (70%)</span><span>'+fmt(tot-nw)+'</span></div><p>The 30% advance is paid online to confirm your order. It is worked out on your final total after all discounts.</p></span>';}
+  return x+'</label>';
+}
+function payOpts(t){return '<p class="pgrp">Pay online</p>'+payLabel("UPI",t)+payLabel("Card",t)+'<p class="pgrp">Pay on delivery</p>'+payLabel("COD",t)+payLabel("PCOD",t)}
+function coSummary(t){
+  var m=PAY[payM];
+  return '<div class="sum"><div><span>Subtotal</span><span>'+fmt(t.sub)+'</span></div>'
+   +(t.d?'<div class="disc"><span>Code '+COUPON+'</span><span>−'+fmt(t.d)+'</span></div>':'')
+   +(t.pd?'<div class="disc"><span>'+(m.pre?'Prepaid discount':'Partial COD discount')+'</span><span>−'+fmt(t.pd)+'</span></div>':'')
+   +'<div><span>Delivery</span><span>Free</span></div>'
+   +'<div class="tot"><span>Total</span><span>'+fmt(t.total)+'</span></div>'
+   +(m.adv?'<div class="disc"><span>Pay now (30%)</span><span>'+fmt(t.now)+'</span></div><div><span>Pay on delivery</span><span>'+fmt(t.later)+'</span></div>':'')
+   +'</div><button class="btn primary block" id="placeBtn" data-act="place">'+(m.adv?'Pay '+fmt(t.now)+' and place order':m.pre?'Pay '+fmt(t.total)+' and place order':'Place order')+'</button>';
 }
 function count(){return cart.items.reduce(function(a,i){return a+i.qty},0)}
 function persist(){save("whyverse-cart",cart);var n=count(),c=$("#cartCount");c.textContent=n;c.classList.toggle("zero",n===0)}
@@ -593,7 +646,7 @@ function renderCart(){
   var body=$("#dBody"),foot=$("#dFoot"),title=$("#dTitle"),t=totals();
   if(cartView==="done"){
     title.textContent="Order placed";
-    body.innerHTML='<div class="done"><div class="ok">'+I.check+'</div><h3>Thank you, '+esc(lastOrder.name)+'</h3><p>Order <b class="mono" style="letter-spacing:.04em">'+lastOrder.id+'</b> for '+fmt(lastOrder.total)+' is confirmed. Expected delivery by '+deliveryDate(5)+'.</p><p style="font-size:13px">This is a demo store, so no payment was taken.</p></div>';
+    body.innerHTML='<div class="done"><div class="ok">'+I.check+'</div><h3>Thank you, '+esc(lastOrder.name)+'</h3><p>Order <b class="mono" style="letter-spacing:.04em">'+lastOrder.id+'</b> for '+fmt(lastOrder.total)+' is confirmed. Expected delivery by '+deliveryDate(5)+'.</p>'+(lastOrder.pay==="PCOD"?'<p>Advance paid: <b>'+fmt(lastOrder.now)+'</b>. Pay <b>'+fmt(lastOrder.later)+'</b> in cash on delivery.</p>':lastOrder.pay==="COD"?'<p>Pay <b>'+fmt(lastOrder.total)+'</b> in cash on delivery.</p>':'')+'<p style="font-size:13px">This is a demo store, so no payment was taken.</p></div>';
     foot.innerHTML='<button class="btn primary block" data-act="closeCart">Continue shopping</button>';return;
   }
   if(cartView==="checkout"){
@@ -601,10 +654,14 @@ function renderCart(){
     body.innerHTML='<form class="co" id="coForm" novalidate><button type="button" class="back" data-act="back">Back to cart</button>'
      +'<label class="field" for="coName">Full name<input class="in" id="coName" autocomplete="name"></label>'
      +'<div class="two"><label class="field" for="coPhone">Phone<input class="in" id="coPhone" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10 digits"></label><label class="field" for="coPin">Pincode<input class="in" id="coPin" inputmode="numeric" maxlength="6" autocomplete="postal-code"></label></div>'
-     +'<label class="field" for="coAddr">Address<textarea class="in" id="coAddr" autocomplete="street-address" style="min-height:76px"></textarea></label>'
-     +'<div class="field">Payment<div class="pay"><label><input type="radio" name="pay" value="UPI" checked> UPI</label><label><input type="radio" name="pay" value="Card"> Credit or debit card</label><label><input type="radio" name="pay" value="COD"> Cash on delivery</label></div></div>'
+     +'<label class="field" for="coPhone2">Secondary phone <span class="opt">(optional)</span><input class="in" id="coPhone2" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="Another number we can reach"></label>'
+     +'<label class="field" for="coAddr">Address<textarea class="in" id="coAddr" autocomplete="street-address" style="min-height:76px" placeholder="House name, street, landmark"></textarea></label>'
+     +'<div class="two"><label class="field" for="coCity">City / Town<input class="in" id="coCity" autocomplete="address-level2"></label><label class="field" for="coDist">District<input class="in" id="coDist" list="distList" autocomplete="off" placeholder="Choose or type"></label></div>'
+     +'<label class="field" for="coState">State<select class="in sel" id="coState" autocomplete="address-level1"><option value="">Select state</option><option>Andaman and Nicobar Islands</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chandigarh</option><option>Chhattisgarh</option><option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jammu and Kashmir</option><option>Jharkhand</option><option>Karnataka</option><option selected>Kerala</option><option>Ladakh</option><option>Lakshadweep</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Puducherry</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option></select></label><datalist id="distList"><option value="Alappuzha"><option value="Ernakulam"><option value="Idukki"><option value="Kannur"><option value="Kasaragod"><option value="Kollam"><option value="Kottayam"><option value="Kozhikode"><option value="Malappuram"><option value="Palakkad"><option value="Pathanamthitta"><option value="Thiruvananthapuram"><option value="Thrissur"><option value="Wayanad"></datalist>'
+     +'<h4>Payment</h4><div class="prebanner">'+I.tag+'<span><b>Prepaid orders save '+fmt(PAY.UPI.off)+'.</b> Pay in full by UPI or card to get the discount.</span></div>'
+     +'<div class="pay" id="payBox">'+payOpts(t)+'</div>'
      +'<p class="hint err" id="coHint" role="alert"></p></form>';
-    foot.innerHTML='<div class="sum"><div class="tot"><span>Total</span><span>'+fmt(t.total)+'</span></div></div><button class="btn primary block" id="placeBtn" data-act="place">Place order</button>';return;
+    foot.innerHTML=coSummary(t);return;
   }
   var n=count();
   title.textContent="Your cart"+(n?" ("+n+")":"");
@@ -613,14 +670,13 @@ function renderCart(){
     foot.innerHTML="";foot.hidden=true;return;
   }
   foot.hidden=false;
-  var left=Math.max(0,FREE_AT-t.after),pct=Math.min(100,t.after/FREE_AT*100);
   var lines=cart.items.map(function(i){
     var p=byId(i.id),c=p.colors[i.ci];
     return '<li class="line"><a class="thumb" href="#p-'+p.id+'" data-act="closeCart" aria-label="View '+esc(p.name)+'">'+art(p,c.h)+'</a>'
      +'<div><p class="ln">'+esc(p.name)+'</p><p class="lc">'+esc(c.n)+' · '+fmt(p.price)+'</p><div class="mini"><button data-act="dec" data-k="'+key(i)+'" aria-label="Decrease quantity">−</button><span>'+i.qty+'</span><button data-act="inc" data-k="'+key(i)+'" aria-label="Increase quantity">+</button></div></div>'
      +'<div class="lp">'+fmt(p.price*i.qty)+'<button class="rm" data-act="rm" data-k="'+key(i)+'">Remove</button></div></li>';
   }).join("");
-  body.innerHTML='<div class="ship">'+(left>0?'Add <b>'+fmt(left)+'</b> more for free delivery':'<b>You get free delivery</b>')+'<div class="meter"><i style="--w:'+pct+'%"></i></div></div><ul>'+lines+'</ul>';
+  body.innerHTML='<div class="ship"><b>You get free delivery</b> on this order</div><ul>'+lines+'</ul>';
   foot.innerHTML='<form class="cform" id="couponForm" novalidate><input class="in" id="couponInput" placeholder="Discount code" aria-label="Discount code" autocapitalize="characters"><button class="btn ghost sm" style="height:44px" type="submit">Apply</button></form>'
    +'<p class="hint'+(cart.coupon?' ok':'')+'" id="couponHint" style="margin:-4px 0 0">'+(cart.coupon?'Code '+cart.coupon+' applied':'')+'</p>'
    +'<div class="sum"><div><span>Subtotal</span><span>'+fmt(t.sub)+'</span></div>'
@@ -669,6 +725,8 @@ document.addEventListener("click",function(e){
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("#drawer").classList.contains("open"))closeCart()});
 document.addEventListener("change",function(e){
   if(e.target.id==="rvSort"){sel.sort=e.target.value;$("#rvList").innerHTML=reviewList(byId(sel.id))}
+  if(e.target.id==="coState"){var di=$("#coDist");if(e.target.value==="Kerala")di.setAttribute("list","distList");else di.removeAttribute("list")}
+  if(e.target.name==="pay"&&PAY[e.target.value]){payM=e.target.value;$("#dFoot").innerHTML=coSummary(totals())}
 });
 document.addEventListener("submit",function(e){
   var id=e.target.id;e.preventDefault();
@@ -701,7 +759,14 @@ function placeOrder(){
   if(!n||!ad){h.textContent="Enter your name and delivery address.";return}
   if(!/^[6-9]\d{9}$/.test(ph)){h.textContent="Enter a valid 10-digit mobile number.";return}
   if(!/^[1-9]\d{5}$/.test(pin)){h.textContent="Enter a valid 6-digit pincode.";return}
-  lastOrder={name:n.split(" ")[0],id:"WV-"+(10000+Math.floor(Math.random()*89999)),total:totals().total};
+  var ph2=$("#coPhone2").value.trim(),city=$("#coCity").value.trim(),dist=$("#coDist").value.trim();
+  if(ph2&&!/^[6-9]\d{9}$/.test(ph2)){h.textContent="Enter a valid 10-digit secondary number, or leave it empty.";return}
+  if(ph2&&ph2===ph){h.textContent="Your secondary number must be different from your main number.";return}
+  if(!city){h.textContent="Enter your city or town.";return}
+  if(!dist){h.textContent="Enter your district.";return}
+  if(!$("#coState").value){h.textContent="Select your state.";return}
+  var t=totals();
+  lastOrder={name:n.split(" ")[0],id:"WV-"+(10000+Math.floor(Math.random()*89999)),total:t.total,now:t.now,later:t.later,pay:payM};
   cart={items:[],coupon:null};persist();cartView="done";renderCart();
 }
 
