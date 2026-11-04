@@ -80,6 +80,7 @@ ul{margin:0;padding:0;list-style:none}
 .btn.ghost{border-color:var(--line-strong)}
 .btn.ghost:hover{border-color:var(--ink)}
 .btn.block{width:100%}
+.btn:disabled{opacity:.6;cursor:progress;transform:none}
 .btn.sm{height:36px;padding:0 16px;font-size:13px}
 
 /* hero */
@@ -765,9 +766,17 @@ function placeOrder(){
   if(!city){h.textContent="Enter your city or town.";return}
   if(!dist){h.textContent="Enter your district.";return}
   if(!$("#coState").value){h.textContent="Select your state.";return}
-  var t=totals();
-  lastOrder={name:n.split(" ")[0],id:"WV-"+(10000+Math.floor(Math.random()*89999)),total:t.total,now:t.now,later:t.later,pay:payM};
-  cart={items:[],coupon:null};persist();cartView="done";renderCart();
+  var btn=$("#placeBtn");if(btn.disabled)return;
+  var label=btn.textContent;btn.disabled=true;btn.textContent="Placing order…";h.textContent="";
+  var payload={customer:{name:n,phone:ph,phone2:ph2,address:ad,city:city,district:dist,state:$("#coState").value,pincode:pin},
+    items:cart.items.map(function(i){return {id:i.id,ci:i.ci,qty:i.qty}}),coupon:cart.coupon,payment:payM};
+  fetch("/api/orders",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+   .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j.error||"Could not place your order. Please try again.");return j.order})})
+   .then(function(o){
+     lastOrder={name:n.split(" ")[0],id:o.order_no,total:o.total,now:o.paid_now,later:o.due_on_delivery,pay:o.payment_method};
+     cart={items:[],coupon:null};persist();cartView="done";renderCart();
+   })
+   .catch(function(e){btn.disabled=false;btn.textContent=label;h.textContent=e.message||"Could not place your order. Please try again."});
 }
 
 persist();route();
