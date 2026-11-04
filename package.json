@@ -1,0 +1,12 @@
+{
+  "name": "whyverse-store",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/database": "^2.0.1"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.0.3",
+    "@types/node": "^26.6.6"
+  }
+}

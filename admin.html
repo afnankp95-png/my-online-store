@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Orders · Whyverse admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F4F2;--surface:#FFFFFF;--ink:#111416;--muted:#5B6560;--line:#DCDFDA;--line-strong:#C6CBC5;
+  --accent:#2B3AF5;--accent-ink:#FFFFFF;--good:#17784A;--bad:#B3261E;--warn:#9A5B00;
+  --f-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0D0F10;--surface:#16191A;--ink:#EDEFEB;--muted:#9AA39D;--line:#262B29;--line-strong:#3A413E;
+  --accent:#8A93FF;--accent-ink:#0D0F10;--good:#4CC38A;--bad:#FF8A80;--warn:#F2B63C;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.02em;line-height:1.1}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 20px;border-radius:999px;font-weight:600;font-size:14px;border:1px solid transparent;transition:background .15s,border-color .15s}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.primary:hover{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{border-color:var(--line-strong)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.6;cursor:progress}
+.in{height:42px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);color:var(--ink);padding:0 14px;font:inherit;min-width:0}
+.in:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login form{width:min(380px,100%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px;display:grid;gap:16px}
+.login h1{font-size:28px;font-weight:800}
+.login .in{width:100%;height:46px}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin:0}
+
+/* app */
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font:800 20px var(--f-display);letter-spacing:-.03em}
+.logo small{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:8px}
+.grow{flex:1}
+main{padding:28px 0 64px}
+.top{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.top h2{font-size:32px;font-weight:800}
+.range{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.range button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted)}
+.range button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat .v{font:800 30px/1.1 var(--f-display);letter-spacing:-.03em;margin-top:8px;font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px;color:var(--muted);margin-top:4px}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.panel h3{font-size:16px;font-weight:600;margin-bottom:12px}
+.bars{display:grid;gap:10px}
+.bars .r{display:grid;grid-template-columns:130px 1fr auto;gap:12px;align-items:center;font-size:13px}
+.bars .t{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bars .t i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.bars .n{font-variant-numeric:tabular-nums;color:var(--muted);min-width:110px;text-align:right}
+.chart{display:flex;align-items:end;gap:4px;height:120px;padding-top:8px}
+.chart div{flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px;height:100%;min-width:0}
+.chart i{display:block;width:100%;max-width:28px;background:var(--accent);border-radius:4px 4px 2px 2px;min-height:2px}
+.chart span{font-size:10px;color:var(--muted);white-space:nowrap}
+.chart div:hover i{opacity:.75}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:28px 0 12px}
+.toolbar h3{font-size:20px;font-weight:700;margin-right:auto}
+.toolbar .in{height:38px}
+.toolbar input.in{width:240px}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.row{cursor:pointer}
+tr.row:hover td{background:color-mix(in srgb,var(--accent) 4%,transparent)}
+tbody tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.on b{font-family:var(--f-mono);font-weight:500;font-size:13px}
+.sub{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st-new{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.st-packed{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.st-shipped{color:#0B7A8C;background:color-mix(in srgb,#0B7A8C 14%,transparent)}
+.st-delivered{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.st-returned,.st-cancelled{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.paytag{font-size:12px;border:1px solid var(--line-strong);border-radius:6px;padding:2px 6px;white-space:nowrap}
+.empty{padding:56px 20px;text-align:center;color:var(--muted)}
+
+/* detail drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:.2s;z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--bg);z-index:21;transform:translateX(100%);transition:transform .25s cubic-bezier(.2,.7,.2,1);overflow:auto;padding:24px;display:grid;gap:16px;align-content:start}
+.open .scrim{opacity:1;visibility:visible}
+.open .drawer{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.dh h3{font:700 24px var(--f-display)}
+.x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-strong);font-size:20px;line-height:1}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:8px;font-size:14px}
+.card h4{margin:0 0 2px;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kv{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.kv.tot{font:700 17px var(--f-display);border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.kv.good{color:var(--good)}
+.stbtns{display:flex;flex-wrap:wrap;gap:6px}
+.stbtns button{height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line-strong);font-size:13px;font-weight:500;text-transform:capitalize}
+.stbtns button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+textarea.in{width:100%;height:auto;min-height:80px;padding:10px 12px;resize:vertical}
+a.tel{color:var(--accent);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.2s;z-index:30;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .hide-m{display:none}
+  .toolbar input.in{width:100%}
+}
+</style>
+</head>
+<body>
+
+<section class="login" id="login">
+  <form id="loginForm" novalidate>
+    <p class="mono muted">Whyverse admin</p>
+    <h1>Sign in to see your orders</h1>
+    <input class="in" id="pw" type="password" autocomplete="current-password" placeholder="Admin password" aria-label="Admin password" required>
+    <button class="btn primary" id="loginBtn" type="submit">Sign in</button>
+    <p class="err" id="loginErr" role="alert"></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header><div class="wrap">
+    <span class="logo">whyverse<small>Admin</small></span>
+    <span class="grow"></span>
+    <button class="btn ghost" id="refresh" style="height:36px;padding:0 14px;font-size:13px">Refresh</button>
+    <button class="btn ghost" id="logout" style="height:36px;padding:0 14px;font-size:13px">Sign out</button>
+  </div></header>
+
+  <main class="wrap">
+    <div class="top">
+      <div><p class="mono muted" id="updated">Loading…</p><h2>Sales overview</h2></div>
+      <div class="range" id="range" role="group" aria-label="Date range">
+        <button data-r="today" aria-pressed="false">Today</button>
+        <button data-r="7" aria-pressed="false">7 days</button>
+        <button data-r="30" aria-pressed="true">30 days</button>
+        <button data-r="all" aria-pressed="false">All time</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="grid2">
+      <div class="panel"><h3>Daily sales</h3><div class="chart" id="chart"></div></div>
+      <div class="panel"><h3>Best sellers</h3><div class="bars" id="best"></div></div>
+    </div>
+
+    <div class="toolbar">
+      <h3>Orders</h3>
+      <input class="in" id="q" type="search" placeholder="Search name, phone, order no." aria-label="Search orders">
+      <select class="in" id="fStatus" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="new">New</option><option value="packed">Packed</option><option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option><option value="returned">Returned</option><option value="cancelled">Cancelled</option>
+      </select>
+      <select class="in" id="fPay" aria-label="Filter by payment">
+        <option value="">All payments</option>
+        <option value="prepaid">Prepaid (UPI / card)</option><option value="COD">Cash on delivery</option><option value="PCOD">Partial COD</option>
+      </select>
+      <button class="btn ghost" id="csv" style="height:38px;padding:0 14px;font-size:13px">Download CSV</button>
+    </div>
+    <div class="list"><table>
+      <thead><tr><th>Order</th><th>Customer</th><th class="hide-m">Items</th><th class="hide-m">Payment</th><th>Status</th><th class="num">Total</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </main>
+</div>
+
+<div id="det"><div class="scrim" data-close></div><aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Order details"></aside></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+var KEY="wv-admin-pw",pw=sessionStorage.getItem(KEY)||"",orders=[],range="30",openNo=null;
+var STATUSES=["new","packed","shipped","delivered","returned","cancelled"];
+var PAYN={UPI:"UPI",Card:"Card",COD:"Cash on delivery",PCOD:"Partial COD"};
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmt(n){return "₹"+Math.round(n||0).toLocaleString("en-IN")}
+function dt(s,withTime){var d=new Date(s);return d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+(withTime?", "+d.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"}):"")}
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove("show")},2200)}
+function pill(s){return '<span class="pill st-'+esc(s)+'">'+esc(s.charAt(0).toUpperCase()+s.slice(1))+'</span>'}
+function pl(n,w){return n+" "+w+(n===1?"":"s")}
+function isPre(o){return o.payment_method==="UPI"||o.payment_method==="Card"}
+
+function api(path,opts){
+  opts=opts||{};opts.headers=Object.assign({"Authorization":"Bearer "+pw,"Content-Type":"application/json"},opts.headers||{});
+  return fetch(path,opts).then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok){var e=new Error(j.error||"Request failed");e.status=r.status;throw e}return j})});
+}
+
+function showLogin(msg){$("#app").hidden=true;$("#login").hidden=false;$("#loginErr").textContent=msg||"";$("#pw").focus()}
+function load(){
+  $("#refresh").disabled=true;
+  return api("/api/orders").then(function(j){
+    orders=j.orders||[];$("#login").hidden=true;$("#app").hidden=false;
+    $("#updated").textContent="Updated "+new Date().toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"});render();
+  }).catch(function(e){
+    if(e.status===401||e.status===503){sessionStorage.removeItem(KEY);pw="";showLogin(e.message)}else toast(e.message);
+    throw e;
+  }).finally(function(){$("#refresh").disabled=false});
+}
+
+$("#loginForm").addEventListener("submit",function(e){
+  e.preventDefault();var v=$("#pw").value;if(!v){$("#loginErr").textContent="Enter your password.";return}
+  var b=$("#loginBtn");b.disabled=true;b.textContent="Signing in…";pw=v;
+  load().then(function(){sessionStorage.setItem(KEY,pw);$("#pw").value=""}).catch(function(){}).finally(function(){b.disabled=false;b.textContent="Sign in"});
+});
+$("#logout").addEventListener("click",function(){sessionStorage.removeItem(KEY);pw="";orders=[];showLogin("")});
+$("#refresh").addEventListener("click",function(){load().catch(function(){})});
+
+function inRange(o){
+  if(range==="all")return true;
+  var d=new Date(o.created_at),now=new Date();
+  if(range==="today")return d.toDateString()===now.toDateString();
+  var from=new Date(now);from.setHours(0,0,0,0);from.setDate(from.getDate()-(+range-1));return d>=from;
+}
+function render(){renderStats();renderRows()}
+
+function renderStats(){
+  var list=orders.filter(inRange),sales=list.filter(function(o){return o.status!=="cancelled"&&o.status!=="returned"});
+  var rev=sales.reduce(function(a,o){return a+o.total},0);
+  var due=sales.filter(function(o){return o.status!=="delivered"}).reduce(function(a,o){return a+o.due_on_delivery},0);
+  var open=list.filter(function(o){return o.status==="new"||o.status==="packed"}).length;
+  var lbl={today:"today","7":"last 7 days","30":"last 30 days",all:"all time"}[range];
+  $("#stats").innerHTML=[
+    ["Revenue",fmt(rev),pl(sales.length,"order")+", "+lbl],
+    ["Orders",list.length,list.length-sales.length+" cancelled or returned"],
+    ["Average order",fmt(sales.length?rev/sales.length:0),"Per order, "+lbl],
+    ["Cash to collect",fmt(due),pl(open,"order")+" to pack or ship"]
+  ].map(function(s){return '<div class="stat"><p class="mono muted" style="margin:0">'+s[0]+'</p><div class="v">'+s[1]+'</div><div class="s">'+s[2]+'</div></div>'}).join("");
+
+  // daily chart (last 14 days, or 30 when range is 30/all)
+  var days=range==="7"||range==="today"?7:range==="30"?30:30,buckets=[],max=0;
+  for(var i=days-1;i>=0;i--){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);buckets.push({d:d,v:0})}
+  sales.forEach(function(o){var t=new Date(o.created_at);t.setHours(0,0,0,0);buckets.forEach(function(b){if(b.d.getTime()===t.getTime())b.v+=o.total})});
+  buckets.forEach(function(b){if(b.v>max)max=b.v});
+  $("#chart").innerHTML=buckets.map(function(b,i){var showL=days<=7||i%5===0||i===buckets.length-1;
+    return '<div title="'+dt(b.d)+': '+fmt(b.v)+'"><i style="height:'+(max?Math.max(2,b.v/max*100):2)+'%"></i><span>'+(showL?dt(b.d):"&nbsp;")+'</span></div>'}).join("");
+
+  var p={};sales.forEach(function(o){(o.items||[]).forEach(function(it){var x=p[it.name]||(p[it.name]={q:0,v:0});x.q+=it.qty;x.v+=it.qty*it.price})});
+  var best=Object.keys(p).map(function(k){return {n:k,q:p[k].q,v:p[k].v}}).sort(function(a,b){return b.v-a.v}),bm=best.length?best[0].v:0;
+  $("#best").innerHTML=best.length?best.map(function(b){return '<div class="r"><span>'+esc(b.n)+'</span><span class="t"><i style="width:'+(b.v/bm*100)+'%"></i></span><span class="n">'+b.q+' sold · '+fmt(b.v)+'</span></div>'}).join(""):'<p class="muted" style="margin:0;font-size:14px">No sales in this period yet.</p>';
+}
+
+function filtered(){
+  var q=$("#q").value.trim().toLowerCase(),st=$("#fStatus").value,py=$("#fPay").value;
+  return orders.filter(inRange).filter(function(o){
+    if(st&&o.status!==st)return false;
+    if(py==="prepaid"&&!isPre(o))return false;
+    if(py&&py!=="prepaid"&&o.payment_method!==py)return false;
+    if(q&&[o.order_no,o.customer_name,o.phone,o.phone2,o.city,o.district,o.pincode].join(" ").toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+}
+function renderRows(){
+  var list=filtered();
+  $("#rows").innerHTML=list.length?list.map(function(o){
+    var n=(o.items||[]).reduce(function(a,i){return a+i.qty},0);
+    return '<tr class="row" data-no="'+esc(o.order_no)+'" tabindex="0"><td class="on"><b>'+esc(o.order_no)+'</b><span class="sub">'+dt(o.created_at,true)+'</span></td>'
+      +'<td>'+esc(o.customer_name)+'<span class="sub">'+esc(o.city)+', '+esc(o.district)+'</span></td>'
+      +'<td class="hide-m">'+n+' item'+(n>1?'s':'')+'<span class="sub">'+esc((o.items||[]).map(function(i){return i.name}).join(", "))+'</span></td>'
+      +'<td class="hide-m"><span class="paytag">'+esc(PAYN[o.payment_method]||o.payment_method)+'</span>'+(o.due_on_delivery?'<span class="sub">'+fmt(o.due_on_delivery)+' due</span>':'')+'</td>'
+      +'<td>'+pill(o.status)+'</td><td class="num"><b>'+fmt(o.total)+'</b></td></tr>';
+  }).join(""):'<tr><td colspan="6" class="empty">'+(orders.length?'No orders match these filters.':'No orders yet. New orders from the store show up here.')+'</td></tr>';
+}
+["q","fStatus","fPay"].forEach(function(id){$("#"+id).addEventListener("input",renderRows)});
+$("#range").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;range=b.dataset.r;
+  [].forEach.call(this.children,function(x){x.setAttribute("aria-pressed",x===b)});render()});
+
+function byNo(no){return orders.filter(function(o){return o.order_no===no})[0]}
+function openDetail(no){
+  var o=byNo(no);if(!o)return;openNo=no;
+  var items=(o.items||[]).map(function(i){return '<div class="kv"><span>'+esc(i.name)+' <span class="muted">· '+esc(i.color)+' × '+i.qty+'</span></span><span>'+fmt(i.price*i.qty)+'</span></div>'}).join("");
+  $("#drawer").innerHTML='<div class="dh"><div><p class="mono muted" style="margin:0 0 6px">'+dt(o.created_at,true)+'</p><h3>'+esc(o.order_no)+'</h3></div><button class="x" data-close aria-label="Close">×</button></div>'
+   +'<div class="card"><h4>Status</h4><div class="stbtns">'+STATUSES.map(function(s){return '<button data-st="'+s+'" aria-pressed="'+(o.status===s)+'">'+s+'</button>'}).join("")+'</div></div>'
+   +'<div class="card"><h4>Customer</h4><b>'+esc(o.customer_name)+'</b>'
+   +'<div><a class="tel" href="tel:+91'+esc(o.phone)+'">'+esc(o.phone)+'</a>'+(o.phone2?' <span class="muted">· alt</span> <a class="tel" href="tel:+91'+esc(o.phone2)+'">'+esc(o.phone2)+'</a>':'')+'</div>'
+   +'<div class="muted" style="white-space:pre-line">'+esc(o.address)+'\n'+esc(o.city)+', '+esc(o.district)+'\n'+esc(o.state)+' '+esc(o.pincode)+'</div></div>'
+   +'<div class="card"><h4>Items</h4>'+items
+   +'<div class="kv" style="border-top:1px solid var(--line);padding-top:8px;margin-top:4px"><span>Subtotal</span><span>'+fmt(o.subtotal)+'</span></div>'
+   +(o.coupon_discount?'<div class="kv good"><span>Coupon</span><span>−'+fmt(o.coupon_discount)+'</span></div>':'')
+   +(o.payment_discount?'<div class="kv good"><span>'+(isPre(o)?'Prepaid':'Partial COD')+' discount</span><span>−'+fmt(o.payment_discount)+'</span></div>':'')
+   +'<div class="kv"><span>Delivery</span><span>Free</span></div><div class="kv tot"><span>Total</span><span>'+fmt(o.total)+'</span></div></div>'
+   +'<div class="card"><h4>Payment · '+esc(PAYN[o.payment_method]||o.payment_method)+'</h4><div class="kv"><span>Paid online</span><span>'+fmt(o.paid_now)+'</span></div><div class="kv"><span>To collect on delivery</span><span>'+fmt(o.due_on_delivery)+'</span></div>'
+   +'<p class="muted" style="margin:4px 0 0;font-size:12.5px">The store does not take real payments yet. Check your UPI or bank app before shipping prepaid and partial COD orders.</p></div>'
+   +'<div class="card"><h4>Private note</h4><textarea class="in" id="note" placeholder="Tracking number, courier, anything to remember">'+esc(o.note||"")+'</textarea><button class="btn ghost" id="saveNote" style="justify-self:start;height:36px;font-size:13px">Save note</button></div>';
+  document.getElementById("det").classList.add("open");
+}
+function closeDetail(){document.getElementById("det").classList.remove("open");openNo=null}
+function patch(body,msg){
+  return api("/api/orders/"+encodeURIComponent(openNo),{method:"PATCH",body:JSON.stringify(body)}).then(function(j){
+    var i=orders.findIndex(function(o){return o.order_no===j.order.order_no});if(i>=0)orders[i]=j.order;
+    render();openDetail(j.order.order_no);toast(msg);
+  }).catch(function(e){if(e.status===401){closeDetail();showLogin(e.message)}else toast(e.message)});
+}
+$("#rows").addEventListener("click",function(e){var r=e.target.closest("tr.row");if(r)openDetail(r.dataset.no)});
+$("#rows").addEventListener("keydown",function(e){var r=e.target.closest("tr.row");if(r&&e.key==="Enter")openDetail(r.dataset.no)});
+$("#det").addEventListener("click",function(e){
+  if(e.target.closest("[data-close]"))return closeDetail();
+  var s=e.target.closest("[data-st]");if(s&&s.getAttribute("aria-pressed")!=="true")return patch({status:s.dataset.st},"Marked as "+s.dataset.st);
+  if(e.target.id==="saveNote")return patch({note:$("#note").value},"Note saved");
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&openNo)closeDetail()});
+
+$("#csv").addEventListener("click",function(){
+  var cols=["order_no","created_at","status","customer_name","phone","phone2","address","city","district","state","pincode","items","payment_method","subtotal","coupon_discount","payment_discount","total","paid_now","due_on_delivery","note"];
+  var q=function(v){v=v==null?"":String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  var lines=[cols.join(",")].concat(filtered().map(function(o){return cols.map(function(c){
+    var v=c==="items"?(o.items||[]).map(function(i){return i.name+" ("+i.color+") x"+i.qty}).join("; "):c==="created_at"?new Date(o.created_at).toLocaleString("en-IN"):o[c];return q(v)}).join(",")}));
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv"}));
+  a.download="whyverse-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);
+});
+
+if(pw)load().catch(function(){});else showLogin("");
+})();
+</script>
+</body>
+</html>
