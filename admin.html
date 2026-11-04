@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Orders & sales · Whyverse admin</title>
+<style>
+:root{
+  --bg:#F3F4F2;--surface:#FFFFFF;--ink:#111416;--muted:#5B6560;--line:#DCDFDA;--line-strong:#C6CBC5;
+  --accent:#2B3AF5;--accent-ink:#FFFFFF;--good:#17784A;--bad:#B3261E;--warn:#A15C00;
+  --f-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0D0F10;--surface:#16191A;--ink:#EDEFEB;--muted:#9AA39D;--line:#262B29;--line-strong:#3A413E;
+  --accent:#8A93FF;--accent-ink:#0D0F10;--good:#4CC38A;--bad:#FF8A80;--warn:#F2B63C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.top{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:5}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.brand{font:700 18px var(--f-display);letter-spacing:-.01em;text-decoration:none;color:inherit}
+.brand small{font:500 12px var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
+.btn{height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--line-strong);background:none;font-weight:500}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.in{height:40px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);padding:0 12px;min-width:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.login{max-width:380px;margin:12vh auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;gap:14px}
+.login h1{font:700 24px var(--f-display);margin:0}
+.login p{margin:0;color:var(--muted)}
+.err{color:var(--bad);min-height:1.2em;margin:0;font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:24px 0 16px}
+.bar h1{font:700 28px var(--f-display);letter-spacing:-.02em;margin:0}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;border-radius:999px;height:30px;padding:0 14px;color:var(--muted);font-weight:500}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.kpi span{display:block;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kpi b{display:block;font:700 28px/1.2 var(--f-display);font-variant-numeric:tabular-nums;margin-top:6px;letter-spacing:-.01em}
+.kpi small{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h2{font:600 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:220px}
+.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:8px;padding:6px 10px;font-size:12px;white-space:nowrap;transform:translate(-50%,-100%);display:none}
+table{width:100%;border-collapse:collapse}
+th{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mono{font-family:var(--f-mono);font-size:12px}
+.muted{color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.tools .in{flex:1 1 220px}
+.st{height:30px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);padding:0 8px;font-size:13px}
+.st[data-s=new]{color:var(--accent)}.st[data-s=packed]{color:var(--warn)}.st[data-s=shipped]{color:var(--warn)}
+.st[data-s=delivered]{color:var(--good)}.st[data-s=cancelled]{color:var(--bad)}
+.det{background:var(--bg);font-size:13px}
+.det div{margin:2px 0}
+.rowbtn{background:none;border:0;padding:0;text-align:left;font-weight:600}
+.rowbtn:hover{text-decoration:underline}
+.empty{padding:36px;text-align:center;color:var(--muted)}
+.tscroll{overflow-x:auto}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.hide-sm{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">Whyverse<small>Admin</small></a>
+  <div id="topActions" hidden><button class="btn" id="refresh">Refresh</button> <button class="btn" id="logout">Sign out</button></div>
+</div></header>
+
+<main class="wrap">
+  <form class="login" id="login" hidden>
+    <h1>Orders & sales</h1>
+    <p>Enter the admin password to see your store's orders.</p>
+    <input class="in" id="pw" type="password" autocomplete="current-password" placeholder="Admin password" aria-label="Admin password" required>
+    <p class="err" id="loginErr" role="alert"></p>
+    <button class="btn primary" type="submit">Sign in</button>
+  </form>
+
+  <section id="app" hidden>
+    <div class="bar">
+      <h1>Orders & sales</h1>
+      <div class="seg" id="range" role="group" aria-label="Date range">
+        <button data-d="1">Today</button><button data-d="7">7 days</button><button data-d="30" aria-pressed="true">30 days</button><button data-d="90">90 days</button><button data-d="0">All time</button>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><span>Sales</span><b id="kRev">₹0</b><small id="kRevSub"></small></div>
+      <div class="kpi"><span>Orders</span><b id="kOrd">0</b><small id="kOrdSub"></small></div>
+      <div class="kpi"><span>Avg order value</span><b id="kAov">₹0</b><small>excl. cancelled</small></div>
+      <div class="kpi"><span>Items sold</span><b id="kItems">0</b><small id="kItemsSub"></small></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card"><h2>Daily sales</h2><div class="chart" id="chart"></div></div>
+      <div class="card"><h2>Top products</h2><div id="top"></div></div>
+    </div>
+
+    <div class="card" style="margin:12px 0 40px">
+      <h2>Orders</h2>
+      <div class="tools">
+        <input class="in" id="q" type="search" placeholder="Search by order no., name, phone or pincode" aria-label="Search orders">
+        <select class="in" id="fStatus" aria-label="Filter by status" style="flex:0 0 auto">
+          <option value="">All statuses</option><option value="new">New</option><option value="packed">Packed</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option>
+        </select>
+        <button class="btn" id="csv">Download CSV</button>
+      </div>
+      <div class="tscroll"><table>
+        <thead><tr><th>Order</th><th>Customer</th><th class="hide-sm">Date</th><th class="hide-sm">Payment</th><th class="num">Total</th><th>Status</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var KEY="whyverse-admin-pw",pw=sessionStorage.getItem(KEY)||"",all=[],days=30,open={};
+var STATUSES=["new","packed","shipped","delivered","cancelled"];
+function fmt(n){return "₹"+Math.round(n).toLocaleString("en-IN")}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function dayKey(d){var x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")}
+function startOfDay(offset){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-offset);return d}
+
+function api(method,body){
+  return fetch("/api/admin/orders",{method:method,headers:{"Authorization":"Bearer "+pw,"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined})
+    .then(function(r){return r.json().catch(function(){return {}}).then(function(d){if(!r.ok){var e=new Error(d.error||"Something went wrong");e.status=r.status;throw e}return d})});
+}
+function showLogin(msg){$("#app").hidden=true;$("#topActions").hidden=true;$("#login").hidden=false;$("#loginErr").textContent=msg||"";$("#pw").focus()}
+function load(){
+  return api("GET").then(function(d){
+    all=d.orders||[];sessionStorage.setItem(KEY,pw);
+    $("#login").hidden=true;$("#app").hidden=false;$("#topActions").hidden=false;render();
+  }).catch(function(e){sessionStorage.removeItem(KEY);showLogin(e.message)});
+}
+
+function inRange(){
+  if(!days)return all;
+  var from=startOfDay(days-1);
+  return all.filter(function(o){return new Date(o.createdAt)>=from});
+}
+function prevRange(){
+  if(!days)return null;
+  var from=startOfDay(2*days-1),to=startOfDay(days-1);
+  return all.filter(function(o){var t=new Date(o.createdAt);return t>=from&&t<to});
+}
+function sum(list){
+  var live=list.filter(function(o){return o.status!=="cancelled"});
+  return {rev:live.reduce(function(a,o){return a+o.total},0),n:live.length,items:live.reduce(function(a,o){return a+o.itemCount},0),cancelled:list.length-live.length};
+}
+function delta(cur,prev){
+  if(prev==null)return "";
+  if(!prev)return cur?"new vs previous period":"";
+  var p=Math.round((cur-prev)/prev*100);return (p>=0?"▲ ":"▼ ")+Math.abs(p)+"% vs previous period";
+}
+
+function render(){
+  var list=inRange(),s=sum(list),pr=prevRange(),ps=pr?sum(pr):null;
+  $("#kRev").textContent=fmt(s.rev);$("#kRevSub").textContent=ps?delta(s.rev,ps.rev):"excl. cancelled";
+  $("#kOrd").textContent=s.n.toLocaleString("en-IN");$("#kOrdSub").textContent=s.cancelled?s.cancelled+" cancelled":(ps?delta(s.n,ps.n):"");
+  $("#kAov").textContent=fmt(s.n?s.rev/s.n:0);
+  $("#kItems").textContent=s.items.toLocaleString("en-IN");$("#kItemsSub").textContent=ps?delta(s.items,ps.items):"";
+  renderChart(list);renderTop(list);renderRows(list);
+}
+
+function renderChart(list){
+  var n=days||(function(){if(!all.length)return 30;var first=new Date(all[all.length-1].createdAt);first.setHours(0,0,0,0);return Math.max(7,Math.min(365,Math.round((startOfDay(0)-first)/864e5)+1))})();
+  var buckets=[],map={};
+  for(var i=n-1;i>=0;i--){var d=startOfDay(i),k=dayKey(d);var b={k:k,d:d,v:0,c:0};buckets.push(b);map[k]=b}
+  list.forEach(function(o){if(o.status==="cancelled")return;var b=map[dayKey(o.createdAt)];if(b){b.v+=o.total;b.c++}});
+  var max=Math.max.apply(null,buckets.map(function(b){return b.v}))||1;
+  var W=700,H=220,pl=8,pr=8,pt=14,pb=24,cw=(W-pl-pr)/buckets.length,gap=Math.min(4,cw*.25);
+  var bars=buckets.map(function(b,i){var h=b.v/max*(H-pt-pb);return '<rect data-i="'+i+'" x="'+(pl+i*cw+gap/2).toFixed(1)+'" y="'+(H-pb-h).toFixed(1)+'" width="'+Math.max(1,cw-gap).toFixed(1)+'" height="'+Math.max(b.v?2:0,h).toFixed(1)+'" rx="2" fill="var(--accent)"/>'
+    +'<rect data-i="'+i+'" x="'+(pl+i*cw).toFixed(1)+'" y="0" width="'+cw.toFixed(1)+'" height="'+H+'" fill="transparent"/>'}).join("");
+  var lab=function(b){return b.d.toLocaleDateString("en-IN",{day:"numeric",month:"short"})};
+  var axis='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(H-pb)+'" y2="'+(H-pb)+'" stroke="var(--line-strong)"/>'
+    +'<text x="'+pl+'" y="'+(H-6)+'" font-size="11" fill="var(--muted)">'+lab(buckets[0])+'</text>'
+    +'<text x="'+(W-pr)+'" y="'+(H-6)+'" font-size="11" fill="var(--muted)" text-anchor="end">'+lab(buckets[buckets.length-1])+'</text>'
+    +'<text x="'+pl+'" y="10" font-size="11" fill="var(--muted)">'+fmt(max===1?0:max)+'</text>';
+  var el=$("#chart");
+  el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img" aria-label="Daily sales chart">'+axis+bars+'</svg><div class="tip"></div>';
+  var tip=el.querySelector(".tip"),svg=el.querySelector("svg");
+  svg.addEventListener("mousemove",function(e){
+    var i=e.target.getAttribute("data-i");if(i==null){tip.style.display="none";return}
+    var b=buckets[+i],r=svg.getBoundingClientRect(),er=el.getBoundingClientRect();
+    tip.innerHTML="<b>"+lab(b)+"</b> · "+fmt(b.v)+" · "+b.c+" order"+(b.c===1?"":"s");
+    tip.style.left=(r.left-er.left+(+i+.5)*cw/W*r.width)+"px";tip.style.top=(e.clientY-er.top-10)+"px";tip.style.display="block";
+  });
+  svg.addEventListener("mouseleave",function(){tip.style.display="none"});
+}
+
+function renderTop(list){
+  var m={};
+  list.forEach(function(o){if(o.status==="cancelled")return;(o.items||[]).forEach(function(i){var x=m[i.name]=m[i.name]||{name:i.name,q:0,v:0};x.q+=i.qty;x.v+=i.qty*i.price})});
+  var arr=Object.keys(m).map(function(k){return m[k]}).sort(function(a,b){return b.v-a.v});
+  $("#top").innerHTML=arr.length?'<table><thead><tr><th>Product</th><th class="num">Qty</th><th class="num">Sales</th></tr></thead><tbody>'
+    +arr.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td class="num">'+x.q+'</td><td class="num">'+fmt(x.v)+'</td></tr>'}).join("")+'</tbody></table>'
+    :'<p class="empty">No sales in this period yet.</p>';
+}
+
+function filtered(list){
+  var q=$("#q").value.trim().toLowerCase(),f=$("#fStatus").value;
+  return list.filter(function(o){
+    if(f&&o.status!==f)return false;
+    if(!q)return true;
+    return [o.orderNumber,o.customerName,o.phone,o.pincode].join(" ").toLowerCase().indexOf(q)>=0;
+  });
+}
+function renderRows(list){
+  var rows=filtered(list);
+  if(!rows.length){$("#rows").innerHTML='<tr><td colspan="6" class="empty">'+(all.length?"No orders match.":"No orders yet. They'll show up here as soon as a customer checks out.")+'</td></tr>';return}
+  $("#rows").innerHTML=rows.map(function(o){
+    var dt=new Date(o.createdAt);
+    var sel='<select class="st" data-id="'+o.id+'" data-s="'+o.status+'" aria-label="Status for '+esc(o.orderNumber)+'">'+STATUSES.map(function(s){return '<option value="'+s+'"'+(s===o.status?" selected":"")+'>'+s[0].toUpperCase()+s.slice(1)+'</option>'}).join("")+'</select>';
+    var main='<tr><td><button class="rowbtn mono" data-open="'+o.id+'" aria-expanded="'+!!open[o.id]+'">'+esc(o.orderNumber)+'</button></td><td>'+esc(o.customerName)+'<div class="muted mono">'+esc(o.phone)+'</div></td>'
+      +'<td class="hide-sm">'+dt.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})+'<div class="muted">'+dt.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"})+'</div></td>'
+      +'<td class="hide-sm">'+esc(o.payment)+'</td><td class="num">'+fmt(o.total)+'</td><td>'+sel+'</td></tr>';
+    if(!open[o.id])return main;
+    var items=(o.items||[]).map(function(i){return '<div>'+i.qty+' × '+esc(i.name)+' ('+esc(i.color)+') — '+fmt(i.price*i.qty)+'</div>'}).join("");
+    return main+'<tr class="det"><td colspan="6"><div><b>Ship to:</b> '+esc(o.address)+', '+esc(o.pincode)+'</div>'+items
+      +'<div class="muted">Subtotal '+fmt(o.subtotal)+(o.discount?' · Discount ('+esc(o.coupon)+') −'+fmt(o.discount):'')+' · Delivery '+(o.shipping?fmt(o.shipping):'Free')+' · <b>Total '+fmt(o.total)+'</b></div></td></tr>';
+  }).join("");
+}
+
+function csv(){
+  var rows=filtered(inRange());
+  var head=["Order","Date","Customer","Phone","Pincode","Address","Payment","Items","Subtotal","Discount","Coupon","Delivery","Total","Status"];
+  var q=function(v){v=String(v==null?"":v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+  var lines=[head.map(q).join(",")].concat(rows.map(function(o){
+    return [o.orderNumber,new Date(o.createdAt).toLocaleString("en-IN"),o.customerName,o.phone,o.pincode,o.address,o.payment,
+      (o.items||[]).map(function(i){return i.qty+" x "+i.name+" ("+i.color+")"}).join("; "),o.subtotal,o.discount,o.coupon||"",o.shipping,o.total,o.status].map(q).join(",");
+  }));
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv"}));
+  a.download="whyverse-orders-"+dayKey(new Date())+".csv";document.body.appendChild(a);a.click();a.remove();
+}
+
+$("#login").addEventListener("submit",function(e){e.preventDefault();pw=$("#pw").value;$("#loginErr").textContent="";load()});
+$("#logout").addEventListener("click",function(){pw="";all=[];sessionStorage.removeItem(KEY);$("#pw").value="";showLogin()});
+$("#refresh").addEventListener("click",load);
+$("#range").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;days=+b.dataset.d;
+  document.querySelectorAll("#range button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()});
+$("#q").addEventListener("input",function(){renderRows(inRange())});
+$("#fStatus").addEventListener("change",function(){renderRows(inRange())});
+$("#csv").addEventListener("click",csv);
+$("#rows").addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(!b)return;var id=b.dataset.open;open[id]=!open[id];renderRows(inRange())});
+$("#rows").addEventListener("change",function(e){
+  var s=e.target.closest("select.st");if(!s)return;
+  var id=+s.dataset.id,o=all.filter(function(x){return x.id===id})[0],prev=o.status;
+  o.status=s.value;s.dataset.s=s.value;s.disabled=true;
+  api("PATCH",{id:id,status:s.value}).then(function(){render()}).catch(function(err){
+    o.status=prev;if(err.status===401){showLogin(err.message);return}alert(err.message);render();
+  });
+});
+
+if(pw)load();else showLogin();
+})();
+</script>
+</body>
+</html>

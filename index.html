@@ -593,7 +593,7 @@ function renderCart(){
   var body=$("#dBody"),foot=$("#dFoot"),title=$("#dTitle"),t=totals();
   if(cartView==="done"){
     title.textContent="Order placed";
-    body.innerHTML='<div class="done"><div class="ok">'+I.check+'</div><h3>Thank you, '+esc(lastOrder.name)+'</h3><p>Order <b class="mono" style="letter-spacing:.04em">'+lastOrder.id+'</b> for '+fmt(lastOrder.total)+' is confirmed. Expected delivery by '+deliveryDate(5)+'.</p><p style="font-size:13px">This is a demo store, so no payment was taken.</p></div>';
+    body.innerHTML='<div class="done"><div class="ok">'+I.check+'</div><h3>Thank you, '+esc(lastOrder.name)+'</h3><p>Order <b class="mono" style="letter-spacing:.04em">'+lastOrder.id+'</b> for '+fmt(lastOrder.total)+' is confirmed. Expected delivery by '+deliveryDate(5)+'.</p></div>';
     foot.innerHTML='<button class="btn primary block" data-act="closeCart">Continue shopping</button>';return;
   }
   if(cartView==="checkout"){
@@ -701,8 +701,20 @@ function placeOrder(){
   if(!n||!ad){h.textContent="Enter your name and delivery address.";return}
   if(!/^[6-9]\d{9}$/.test(ph)){h.textContent="Enter a valid 10-digit mobile number.";return}
   if(!/^[1-9]\d{5}$/.test(pin)){h.textContent="Enter a valid 6-digit pincode.";return}
-  lastOrder={name:n.split(" ")[0],id:"WV-"+(10000+Math.floor(Math.random()*89999)),total:totals().total};
-  cart={items:[],coupon:null};persist();cartView="done";renderCart();
+  var payEl=document.querySelector('input[name="pay"]:checked'),btn=$("#placeBtn");
+  if(placeOrder.busy)return;placeOrder.busy=true;h.textContent="";
+  if(btn){btn.disabled=true;btn.textContent="Placing order…"}
+  fetch("/api/orders",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+    name:n,phone:ph,pincode:pin,address:ad,payment:payEl?payEl.value:"UPI",coupon:cart.coupon,
+    items:cart.items.map(function(i){return {id:i.id,ci:i.ci,qty:i.qty}})
+  })}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d&&d.error||"Could not place the order.");return d})})
+  .then(function(d){
+    lastOrder={name:n.split(" ")[0],id:d.orderNumber,total:d.total};
+    cart={items:[],coupon:null};persist();cartView="done";renderCart();
+  }).catch(function(err){
+    var hh=$("#coHint");if(hh)hh.textContent=err.message||"Could not place the order. Check your connection and try again.";
+    if(btn){btn.disabled=false;btn.textContent="Place order"}
+  }).then(function(){placeOrder.busy=false});
 }
 
 persist();route();
